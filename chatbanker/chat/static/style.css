@@ -1,0 +1,101 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.chat-container {
+    max-width: 600px;
+    margin: 50px auto;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.chat-box {
+    padding: 20px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.input-container {
+    display: flex;
+    padding: 10px;
+}
+
+input {
+    flex: 1;
+    padding: 8px;
+}
+
+button {
+    padding: 8px;
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+h1 {
+    text-align: center;
+    color: #4caf50;
+}
+
+
+.message-container {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.olaf-message {
+    background-color: #f0f0f0; /* Color para mensajes de Olaf */
+}
+
+.user-message {
+    background-color: #4caf50; /* Color para mensajes del usuario */
+    color: #fff; /* Color del texto para mensajes del usuario */
+}
+
+.user-message-right {
+    text-align: right;
+}
+
+.message-title {
+    font-weight: bold;
+}
+
+.message-text {
+    margin-top: 5px;
+}
+
+
+/* ... Otros estilos ... */
+
+.message-container-wrapper {
+    display: flex;
+}
+
+.olaf-wrapper {
+    justify-content: flex-end;
+}
+
+.user-wrapper {
+    justify-content: flex-end;
+    text-align: right; /* Alinea el mensaje del usuario a la derecha */
+}
+
+.message-title {
+    font-weight: bold;
+    margin-right: 5px; /* Ajusta el espacio entre el nombre del remitente y el mensaje */
+}
+
+/* ... Otros estilos ... */
+.message-image img {
+    border-radius: 50%;
+    width: 30px; /* Tamaño deseado de la imagen circular */
+    height: 30px;
+    margin-top: auto; /* Alinear en la parte inferior */
+    margin-right: 15px; /* Ajusta el espacio entre la imagen y el contenedor */
+    margin-bottom: 5px; /* Espacio entre la imagen y el borde inferior del contenedor */
+}
