@@ -1,75 +1,5 @@
-/*document.addEventListener("DOMContentLoaded", function() {
-    appendMessage("Hola bienvenido a Chatbanker, en que te puedo ayudar el día de hoy", "Olaf") 
-});
-
-function sendMessage() {
-    var userInput = document.getElementById("user-input").value;
-
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", "/generar_respuesta/" + encodeURIComponent(userInput) + "/", true);
-    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-
-    xhr.onload = function() {
-        if (xhr.status == 200) {
-            // Manejar la respuesta del servidor (puede ser un mensaje del chatbot).
-            var response = JSON.parse(xhr.responseText);
-            appendMessage(response.mensaje, "Olaf");  // Cambiado a response.mensaje según tu vista Django
-        } else {
-            console.error("Error en la solicitud al servidor");
-        }
-    };
-
-    xhr.send();
-
-    // Agregar el mensaje del usuario al chat.
-    appendMessage(userInput, "You");
-
-    // Limpiar el campo de entrada después de enviar el mensaje.
-    document.getElementById("user-input").value = "";
-}
-/*
-function sendMessage() {
-    var userInput = document.getElementById("user-input").value;
-
-    console.log(userInput);
-
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "/chat/send_message/", true);
-    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-
-    xhr.onload = function() {
-        if (xhr.status == 200) {
-            // Manejar la respuesta del servidor (puede ser un mensaje del chatbot).
-            var response = JSON.parse(xhr.responseText);
-            appendMessage(response.message, "bot");
-        } else {
-            console.error("Error en la solicitud al servidor");
-        }
-    };
-
-    xhr.send(JSON.stringify({ message: userInput }));
-
-    // Agregar el mensaje del usuario al chat.
-    appendMessage(userInput, "user");
-
-    // Limpiar el campo de entrada después de enviar el mensaje.
-    document.getElementById("user-input").value = "";
-}
-
-
-function appendMessage(message, sender) {
-    var chatBox = document.getElementById("chat-box");
-    var messageDiv = document.createElement("div");
-    messageDiv.className = sender;
-    messageDiv.innerHTML = "<strong>" + sender + ":</strong> " + message;
-    chatBox.appendChild(messageDiv);
-
-    // Desplazar automáticamente hacia abajo para mostrar el mensaje más reciente.
-    chatBox.scrollTop = chatBox.scrollHeight;
-}*/
-
 document.addEventListener("DOMContentLoaded", function() {
-    appendMessage("Hola bienvenido a Chatbanker, me llamo Olaf, en que te puedo ayudar el día de hoy", "Olaf") 
+    appendMessage("Hola bienvenido a Chatbanker, me llamo Olaf, en que te puedo ayudar hoy ?", "Olaf") 
 });
 
 function sendMessage() {
@@ -84,6 +14,7 @@ function sendMessage() {
             // Manejar la respuesta del servidor (puede ser un mensaje del chatbot).
             var response = JSON.parse(xhr.responseText);
             appendMessage(response.mensaje, "Olaf");  // Cambiado a response.mensaje según tu vista Django
+            appendMessage("Respuesta obtenidad de: "+response.referencia, "Olaf");
         } else {
             console.error("Error en la solicitud al servidor");
         }

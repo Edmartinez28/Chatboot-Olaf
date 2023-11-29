@@ -10,6 +10,17 @@
 </head>
 <body>
     <h1>Bienvenido a ChatBanker</h1>
+    <hr>
+    <div class="cargarPDF">
+        <form method="post" enctype="multipart/form-data" action="{% url 'cargar_pdf' %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <!-- Campo de entrada para cargar el archivo PDF -->
+            <input type="file" name="entrada" id="entrada">
+            <!--<input type="text" name="textoPrueba" id="textoPrueba"> -->
+            <button type="submit">Cargar PDF</button>
+        </form>
+    </div>   
     <div class="chat-container">
         <div class="chat-box" id="chat-box">
             <!-- Mensajes del chat aparecerán aquí -->
