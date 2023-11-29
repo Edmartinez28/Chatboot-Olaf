@@ -26,7 +26,7 @@ def actualizarEmbeddings():
 
 
 client = openai.OpenAI(api_key='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') # Clave de cuenta free
-#client = openai.OpenAI(api_key='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') # Clave de cuenta pagada
+
 embeddings = pd.read_csv("/home/edmartinez/Documents/UTPL/Septimo Ciclo/Inteligencia Artificial/ChatbootGUI/chatbanker/embeddings.csv")
 nlp = spacy.load('es_core_news_sm')
 
