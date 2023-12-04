@@ -25,8 +25,7 @@ def actualizarEmbeddings():
         listaEmbeddings.append(e.strip('][').split(', '))
 
 
-client = openai.OpenAI(api_key='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') # Clave de cuenta free
-#client = openai.OpenAI(api_key='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') # Clave de cuenta pagada
+
 embeddings = pd.read_csv("/home/edmartinez/Documents/UTPL/Septimo Ciclo/Inteligencia Artificial/ChatbootGUI/chatbanker/embeddings.csv")
 nlp = spacy.load('es_core_news_sm')
 
@@ -42,7 +41,7 @@ def chatboot(request):
 
 def get_embedding(text, model="text-embedding-ada-002"):
    text = text.replace("\n", " ")
-   time.sleep(20)
+   #time.sleep(20)
    print("Embedding generado")
    return client.embeddings.create(input = [text], model=model).data[0].embedding
 
@@ -63,7 +62,7 @@ def encontrarSimilitud(input_embedding , input_text):
 
     similarities = cosine_similarity(input_embedding_array.reshape(1, -1), listaEmbeddings)
     most_similar_index = similarities.argmax()
-    salida2 = embeddings.iloc[most_similar_index : most_similar_index+2]
+    salida2 = embeddings.iloc[most_similar_index : most_similar_index+3]
     print(type(salida2))
     '''
     #Obtener los índices de las N mayores similitudes
@@ -93,7 +92,7 @@ def encontrarSimilitud(input_embedding , input_text):
     messages=[
         #{"role": "system", "content": "Eres una asistente útil."},
         #{"role": "user", "content": "Responda la pregunta con la mayor sinceridad posible utilizando el contexto proporcionado y, si la respuesta no está contenida en el texto siguiente, diga Lo siento no pude encontrar una respuesta"},
-        {"role": "system", "content": "Eres un asistente basado en Inteligencia Artificial capaz de mantener una conversación en tiempo real por texto, que ayudará a resolver dudas sobre los temas que te daremos."},
+        {"role": "system", "content": "Eres un asistente basado en Inteligencia Artificial (Te llamas Fred) capaz de mantener una conversación en tiempo real por texto, que ayudará a resolver dudas sobre los temas que te daremos."},
         {"role": "user", "content": "Responde las preguntas basado en la información que encontraras en el contenido textual entregado. Si por algún motivo la respuesta ni se encuentra dentro de este contenido puedes responder: Lo siento no pude encontrar una respuesta"},
         {"role": "assistant", "content": "Contexto:"+contexto},
         {"role": "user", "content": "Segun el contexto respondeme a lo siguiente"+input_text}

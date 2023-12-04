@@ -28,35 +28,6 @@ function sendMessage() {
     // Limpiar el campo de entrada después de enviar el mensaje.
     document.getElementById("user-input").value = "";
 }
-/*
-function sendMessage() {
-    var userInput = document.getElementById("user-input").value;
-
-    console.log(userInput);
-
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "/chat/send_message/", true);
-    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-
-    xhr.onload = function() {
-        if (xhr.status == 200) {
-            // Manejar la respuesta del servidor (puede ser un mensaje del chatbot).
-            var response = JSON.parse(xhr.responseText);
-            appendMessage(response.message, "bot");
-        } else {
-            console.error("Error en la solicitud al servidor");
-        }
-    };
-
-    xhr.send(JSON.stringify({ message: userInput }));
-
-    // Agregar el mensaje del usuario al chat.
-    appendMessage(userInput, "user");
-
-    // Limpiar el campo de entrada después de enviar el mensaje.
-    document.getElementById("user-input").value = "";
-}*/
-
 
 function appendMessage(message, sender) {
     var chatBox = document.getElementById("chat-box");

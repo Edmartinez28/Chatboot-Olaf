@@ -11,6 +11,11 @@
 <body>
     <h1>Bienvenido a ChatBanker</h1>
     <hr>
+
+    <div class="personaje">
+        <img src="{% static 'fred.jpg' %}" alt="Tu asistente virtual Fred">
+    </div>
+    
     <div class="cargarPDF">
         <form method="post" enctype="multipart/form-data" action="{% url 'cargar_pdf' %}">
             {% csrf_token %}
