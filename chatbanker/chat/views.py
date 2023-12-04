@@ -25,7 +25,6 @@ def actualizarEmbeddings():
         listaEmbeddings.append(e.strip('][').split(', '))
 
 
-
 embeddings = pd.read_csv("/home/edmartinez/Documents/UTPL/Septimo Ciclo/Inteligencia Artificial/ChatbootGUI/chatbanker/embeddings.csv")
 nlp = spacy.load('es_core_news_sm')
 
