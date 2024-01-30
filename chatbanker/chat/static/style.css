@@ -107,22 +107,24 @@ hr {
 
 .cargarPDF {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    justify-content: center;
+    justify-content:center;
     width: 100%;
     max-width: 600px;
-    margin: 50px auto;
+    margin: 30px auto -10px auto;
     background-color: #aeddb0;
     height: 10vh;
     border-radius:10px;
 }
 
-
-.cargarPDF form button {
-    border-radius: 10px;
-    font-size: large;
+.cargarPDF .btn {
+    margin: 15px; /* Espaciado entre los botones */
+    width: 25%;
+    background-color: #4caf50;
+    border-color: #4caf50;
 }
+
 
 .personaje{
     display: flex;
@@ -134,4 +136,23 @@ hr {
     border-radius: 50%;
     height: 200px;
     width: auto;
+}
+
+.modal-content .modal-body{
+    align-items: center;
+    text-align: center;
+}
+
+.modal-content .modal-body button{
+    background-color: #4caf50;
+    border-color: #4caf50;
+}
+
+.modal-content .modal-body input[type=number]{
+    width: 80px;
+    border: 1px;
+}
+
+.modal-content table {
+    margin: 0px 20px;
 }

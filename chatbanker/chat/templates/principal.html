@@ -7,25 +7,90 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chatbot</title>
     <link rel="stylesheet" href="{% static 'style.css' %}">
+
+    <!-- Agrega estos enlaces en el head para usar Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </head>
 <body>
-    <h1>Bienvenido a ChatBanker</h1>
+    <h1><strong>Bienvenido a ChatBanker</strong></h1>
     <hr>
 
     <div class="personaje">
-        <img src="{% static 'fred.jpg' %}" alt="Tu asistente virtual Fred">
+        <img src="{% static 'fred.jpg' %}" alt="Tu asistente virtual Olaf">
     </div>
     
     <div class="cargarPDF">
-        <form method="post" enctype="multipart/form-data" action="{% url 'cargar_pdf' %}">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <!-- Campo de entrada para cargar el archivo PDF -->
-            <input type="file" name="entrada" id="entrada">
-            <!--<input type="text" name="textoPrueba" id="textoPrueba"> -->
-            <button type="submit">Cargar PDF</button>
-        </form>
-    </div>   
+        <!-- Primer botón y modal -->
+        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalForm1">
+            Cargar PDF
+        </button>
+
+        <!-- Segundo botón y modal -->
+        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalForm2">
+            PDFs Cargados
+        </button>
+    </div>
+    
+    <div class="modal" id="modalForm1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Ingreso de documento PDF</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" enctype="multipart/form-data" action="{% url 'cargar_pdf' %}">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <input type="file" name="entrada" id="entrada1"><br>
+                        <input type="number" name="version" id="version" value="1"><label>Versión del documento</label><br><br>
+                        <button type="submit" class="btn btn-primary">Cargar PDF</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="modalForm2">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Lista de PDFs Registrados</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <table border="1">
+                    <thead>
+                        <tr>
+                            <!-- Encabezados de columna -->
+                            <th>Archivo</th>
+                            <th>Version</th>
+                            <th>Fecha Ingreso</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in archivos %}
+                            <tr>
+                                <!-- Datos de cada fila -->
+                                <td>{{ row.nombreArchivos }}</td>
+                                <td>{{ row.version }}</td>
+                                <td>{{ row.fechaIngreso }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="chat-container">
         <div class="chat-box" id="chat-box">
             <!-- Mensajes del chat aparecerán aquí -->

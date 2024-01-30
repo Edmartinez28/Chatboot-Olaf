@@ -18,31 +18,94 @@ import time
 import openai
 import PyPDF2
 import spacy
+import csv
+import datetime as dt
 from sklearn.metrics.pairwise import cosine_similarity
 
-def actualizarEmbeddings():
-    for e in embeddings['embedding']:
-        listaEmbeddings.append(e.strip('][').split(', '))
 
-
+#client = openai.OpenAI(api_key='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') # Clave de cuenta free
+client = openai.OpenAI(api_key='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') # Clave de cuenta pagada
 embeddings = pd.read_csv("/home/edmartinez/Documents/UTPL/Septimo Ciclo/Inteligencia Artificial/ChatbootGUI/chatbanker/embeddings.csv")
+archivos = pd.read_csv("/home/edmartinez/Documents/UTPL/Septimo Ciclo/Inteligencia Artificial/ChatbootGUI/chatbanker/archivos.csv")
 nlp = spacy.load('es_core_news_sm')
-
-listaEmbeddings = []
-actualizarEmbeddings()
-
-def index(request):
-    return HttpResponse("Hello, world. You're at the chat index.")
-
-def chatboot(request):
-
-    return render(request , 'principal.html')
 
 def get_embedding(text, model="text-embedding-ada-002"):
    text = text.replace("\n", " ")
    #time.sleep(20)
    print("Embedding generado")
    return client.embeddings.create(input = [text], model=model).data[0].embedding
+
+def generarEmbeddings(datos):
+    datos["embedding"] = datos["entrada"].astype(str).apply(get_embedding) #Se crean las incrustaciones en el dataframe
+    datos.to_csv('embeddings.csv', mode='a', header=False, index=False)
+    print("Se generaron los embedings")
+    actualizarEmbeddings()
+    
+def actualizarEmbeddings():
+    for e in embeddings['embedding']:
+        listaEmbeddings.append(e.strip('][').split(', '))
+
+def extraer_ideas_principales(ruta_pdf):
+    
+    with open(ruta_pdf, 'rb') as file:
+        pdf_reader = PyPDF2.PdfReader(file)
+        text = ''
+        for page_num in range(len(pdf_reader.pages)):
+            text += pdf_reader.pages[page_num].extract_text()
+
+    # Procesamiento de lenguaje natural con spaCy
+    doc = nlp(text)
+
+    # Extraer ideas principales 
+    ideas_principales = [sent.text for sent in doc.sents]
+
+    return ideas_principales
+
+def procesar_pdf(ruta_destino , version):
+      
+    ideas = extraer_ideas_principales(ruta_destino)
+            
+    df = pd.DataFrame(ideas)
+    df["referencia"] = os.path.basename(ruta_destino)
+    df.rename(columns={0: 'entrada'}, inplace=True)
+    df.reset_index(drop=True, inplace=True)
+    df = df[df['entrada'] != '\n']
+
+    print("El numero de ideas extraidas es de:",len(ideas))
+    print(os.path.basename(ruta_destino))
+
+    # Añadimos el archivo a la lista de archivos
+    ruta_archivo = '/home/edmartinez/Documents/UTPL/Septimo Ciclo/Inteligencia Artificial/ChatbootGUI/chatbanker/archivos.csv'
+    nom_archivo = os.path.basename(ruta_destino)
+    # Sobreescribir el archivo CSV
+    with open(ruta_archivo, 'a', newline='') as archivo_csv:
+        escritor_csv = csv.writer(archivo_csv)
+        escritor_csv.writerow([nom_archivo , version , str(dt.date.today())])
+
+
+    generarEmbeddings(df)
+    actualizarEmbeddings()
+
+
+def leerCarpeta():
+
+    for pdf in os.listdir(settings.MEDIA_ROOT):
+        if pdf not in archivos['nombreArchivos'].values:
+            procesar_pdf(os.path.join(settings.MEDIA_ROOT, pdf) , 1)
+
+
+
+listaEmbeddings = []
+actualizarEmbeddings()
+leerCarpeta()
+
+def index(request):
+    return HttpResponse("Hello, world. You're at the chat index.")
+
+def chatboot(request):
+    datos_dict = archivos.to_dict(orient='records')
+    return render(request , 'principal.html' ,  {'archivos': datos_dict})
+
 
 @api_view(['GET'])
 @csrf_exempt
@@ -91,7 +154,7 @@ def encontrarSimilitud(input_embedding , input_text):
     messages=[
         #{"role": "system", "content": "Eres una asistente útil."},
         #{"role": "user", "content": "Responda la pregunta con la mayor sinceridad posible utilizando el contexto proporcionado y, si la respuesta no está contenida en el texto siguiente, diga Lo siento no pude encontrar una respuesta"},
-        {"role": "system", "content": "Eres un asistente basado en Inteligencia Artificial (Te llamas Fred) capaz de mantener una conversación en tiempo real por texto, que ayudará a resolver dudas sobre los temas que te daremos."},
+        {"role": "system", "content": "Eres un asistente basado en Inteligencia Artificial (Te llamas Olaf) capaz de mantener una conversación en tiempo real por texto, que ayudará a resolver dudas sobre los temas que te daremos."},
         {"role": "user", "content": "Responde las preguntas basado en la información que encontraras en el contenido textual entregado. Si por algún motivo la respuesta ni se encuentra dentro de este contenido puedes responder: Lo siento no pude encontrar una respuesta"},
         {"role": "assistant", "content": "Contexto:"+contexto},
         {"role": "user", "content": "Segun el contexto respondeme a lo siguiente"+input_text}
@@ -105,55 +168,23 @@ def encontrarSimilitud(input_embedding , input_text):
 
     return resultado
 
-def extraer_ideas_principales(ruta_pdf):
-    with open(ruta_pdf, 'rb') as file:
-        pdf_reader = PyPDF2.PdfReader(file)
-        text = ''
-        for page_num in range(len(pdf_reader.pages)):
-            text += pdf_reader.pages[page_num].extract_text()
-
-    # Procesamiento de lenguaje natural con spaCy
-    doc = nlp(text)
-
-    # Extraer ideas principales 
-    ideas_principales = [sent.text for sent in doc.sents]
-
-    return ideas_principales
-
-def generarEmbeddings(datos):
-    datos["embedding"] = datos["entrada"].astype(str).apply(get_embedding) #Se crean las incrustaciones en el dataframe
-    datos.to_csv('embeddings.csv', mode='a', header=False, index=False)
-    print("Se generaron los embedings")
-    actualizarEmbeddings()
-
-
 def cargar_pdf(request):
 
     if request.method == 'POST':
         archivo = request.FILES['entrada']
-
+        version = request.POST['version']
         ruta_destino = os.path.join(settings.MEDIA_ROOT, archivo.name)
-        print(ruta_destino)
 
         with open(ruta_destino, 'wb') as destino:
             for parte in archivo.chunks():
                 destino.write(parte)
-        
-        ideas = extraer_ideas_principales(ruta_destino)
-           
-        df = pd.DataFrame(ideas)
-        df["referencia"] = archivo.name
-        df.rename(columns={0: 'entrada'}, inplace=True)
-        df.reset_index(drop=True, inplace=True)
-        df = df[df['entrada'] != '\n']
 
-        print("El numero de ideas extraidas es de:",len(ideas))
-
-        generarEmbeddings(df)
-        actualizarEmbeddings()
+        procesar_pdf(ruta_destino , version)
 
     else:
         form = ModeloPDF()
         print("Fallo")
 
-    return render(request , 'principal.html')
+    datos_dict = archivos.to_dict(orient='records')
+    return render(request , 'principal.html' ,  {'archivos': datos_dict})
+

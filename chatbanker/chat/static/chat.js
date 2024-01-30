@@ -52,7 +52,8 @@ function appendMessage(message, sender) {
     if (sender === "Olaf") {
         var imageDiv = document.createElement("div");
         imageDiv.className = "message-image";
-        imageDiv.innerHTML = `<img src="https://lumiere-a.akamaihd.net/v1/images/ct_frozen_olaf_18466_eabe1344.jpeg?region=0,0,600,600" alt="Olaf">`;
+        //imageDiv.innerHTML = `<img src="https://lumiere-a.akamaihd.net/v1/images/ct_frozen_Olaf_18466_eabe1344.jpeg?region=0,0,600,600" alt="Olaf">`;
+        imageDiv.innerHTML = `<img src="https://media.discordapp.net/attachments/1109874169723756595/1181384850733801502/fred.jpg?ex=6580dd61&is=656e6861&hm=648c64f09bb5f4fdeaac606219310d2a234c92d43ae9b6888103f8d6391de9d6&=&format=webp&width=548&height=548" alt="Olaf">`;
         containerDiv.appendChild(imageDiv);
     }
 
