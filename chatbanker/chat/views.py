@@ -22,9 +22,13 @@ import csv
 import datetime as dt
 from sklearn.metrics.pairwise import cosine_similarity
 
+import fitz
+import pytesseract
+from PIL import Image
+
 
 #client = openai.OpenAI(api_key='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') # Clave de cuenta free
-client = openai.OpenAI(api_key='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') # Clave de cuenta pagada
+client = openai.OpenAI(api_key='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') # Clave de cuenta pagada
 embeddings = pd.read_csv("/home/edmartinez/Documents/UTPL/Septimo Ciclo/Inteligencia Artificial/ChatbootGUI/chatbanker/embeddings.csv")
 archivos = pd.read_csv("/home/edmartinez/Documents/UTPL/Septimo Ciclo/Inteligencia Artificial/ChatbootGUI/chatbanker/archivos.csv")
 nlp = spacy.load('es_core_news_sm')
@@ -45,6 +49,29 @@ def actualizarEmbeddings():
     for e in embeddings['embedding']:
         listaEmbeddings.append(e.strip('][').split(', '))
 
+# Función para extraer texto de una imagen utilizando OCR
+def extract_text_from_image(image):
+    # Utilizar OCR para extraer texto de la imagen
+    text = pytesseract.image_to_string(image)
+    return text
+
+def extraerDeEscaneado(ruta_pdf):
+
+    pdf_document = fitz.open(ruta_pdf)
+    page_text = ""
+
+    for page_number in range(pdf_document.page_count):
+
+        page = pdf_document.load_page(page_number)
+        image = page.get_pixmap() #Renderizar la página como una imagen (dpi determina la resolución)     
+        pil_image = Image.frombytes("RGB", (image.width, image.height), image.samples) # Convertir la imagen de PyMuPDF a una imagen de PIL
+        
+        # Extraer texto de la imagen utilizando OCR
+        page_text += extract_text_from_image(pil_image)
+
+    return page_text
+
+
 def extraer_ideas_principales(ruta_pdf):
     
     with open(ruta_pdf, 'rb') as file:
@@ -52,6 +79,9 @@ def extraer_ideas_principales(ruta_pdf):
         text = ''
         for page_num in range(len(pdf_reader.pages)):
             text += pdf_reader.pages[page_num].extract_text()
+
+    if text == '':
+        text = extraerDeEscaneado(ruta_pdf)
 
     # Procesamiento de lenguaje natural con spaCy
     doc = nlp(text)

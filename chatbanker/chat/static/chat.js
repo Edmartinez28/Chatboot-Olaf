@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function() {
-    appendMessage("Hola bienvenido a Chatbanker, me llamo Olaf, en que te puedo ayudar hoy ?", "Olaf") 
+    appendMessage("Hola bienvenido a tu Chatboot de consulta, me llamo Olaf, en que te puedo ayudar hoy ?", "Olaf") 
 });
 
 function sendMessage() {
