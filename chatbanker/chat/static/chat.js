@@ -52,8 +52,8 @@ function appendMessage(message, sender) {
     if (sender === "Olaf") {
         var imageDiv = document.createElement("div");
         imageDiv.className = "message-image";
-        //imageDiv.innerHTML = `<img src="https://lumiere-a.akamaihd.net/v1/images/ct_frozen_Olaf_18466_eabe1344.jpeg?region=0,0,600,600" alt="Olaf">`;
-        imageDiv.innerHTML = `<img src="https://media.discordapp.net/attachments/1109874169723756595/1181384850733801502/fred.jpg?ex=6580dd61&is=656e6861&hm=648c64f09bb5f4fdeaac606219310d2a234c92d43ae9b6888103f8d6391de9d6&=&format=webp&width=548&height=548" alt="Olaf">`;
+        imageDiv.innerHTML = `<img src="./static/fred.jpg" alt="Olaf">`;
+        //imageDiv.innerHTML = `<img src="https://media.discordapp.net/attachments/1109874169723756595/1181384850733801502/fred.jpg?ex=6580dd61&is=656e6861&hm=648c64f09bb5f4fdeaac606219310d2a234c92d43ae9b6888103f8d6391de9d6&=&format=webp&width=548&height=548" alt="Olaf">`;
         containerDiv.appendChild(imageDiv);
     }
 
@@ -65,5 +65,22 @@ function appendMessage(message, sender) {
 
     // Desplazar automáticamente hacia abajo para mostrar el mensaje más reciente.
     chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+function startSpeechRecognition() {
+    var recognition = new webkitSpeechRecognition() || new SpeechRecognition();
+    recognition.lang = 'es-ES'; // Establece el idioma de reconocimiento
+    recognition.interimResults = true; // Activa los resultados parciales
+
+    recognition.onresult = function(event) {
+        var transcript = event.results[0][0].transcript;
+        document.getElementById('user-input').value = transcript;
+    };
+
+    recognition.onend = function() {
+        recognition.stop();
+    };
+
+    recognition.start();
 }
 

@@ -28,7 +28,7 @@ from PIL import Image
 
 
 #client = openai.OpenAI(api_key='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') # Clave de cuenta free
-client = openai.OpenAI(api_key='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') # Clave de cuenta pagada
+client = openai.OpenAI(api_key='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') # Clave de cuenta pagada
 embeddings = pd.read_csv("/home/edmartinez/Documents/UTPL/Septimo Ciclo/Inteligencia Artificial/ChatbootGUI/chatbanker/embeddings.csv")
 archivos = pd.read_csv("/home/edmartinez/Documents/UTPL/Septimo Ciclo/Inteligencia Artificial/ChatbootGUI/chatbanker/archivos.csv")
 nlp = spacy.load('es_core_news_sm')
@@ -180,7 +180,7 @@ def encontrarSimilitud(input_embedding , input_text):
     print("=============================================================")
 
     response = client.chat.completions.create(
-    model="gpt-3.5-turbo",
+    model="gpt-3.5-turbo-0125",
     messages=[
         #{"role": "system", "content": "Eres una asistente útil."},
         #{"role": "user", "content": "Responda la pregunta con la mayor sinceridad posible utilizando el contexto proporcionado y, si la respuesta no está contenida en el texto siguiente, diga Lo siento no pude encontrar una respuesta"},
